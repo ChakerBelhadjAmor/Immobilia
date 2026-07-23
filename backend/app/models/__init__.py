@@ -6,7 +6,9 @@ Alembic autogenerate runs. Add each domain module as it gains real tables.
 
 from app.core.db import Base
 from app.models import (  # noqa: F401  (re-exported for metadata registration)
+    chat,
     coloc,
+    dvf_property,
     identity,
     investor,
     legal,
