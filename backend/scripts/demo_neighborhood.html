@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Immobil'IA — Agent Maison &amp; Quartier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-50:#f0f3f9; --navy-100:#dde4ef; --navy-200:#bcc9de; --navy-300:#93a6c5;
+    --navy-400:#6c82a8; --navy-500:#4c628b; --navy-600:#38496e; --navy-700:#2b3956;
+    --navy-800:#1f2a44; --navy-900:#16203a; --navy-950:#0d1425;
+
+    --gold-50:#fbf7ee; --gold-100:#f4ebd5; --gold-200:#e8d6aa; --gold-300:#dcc183;
+    --gold-400:#d1b26c; --gold-500:#c6a75e; --gold-600:#a98b47; --gold-700:#876d37;
+
+    --sand-50:#fbf9f4; --sand-100:#f7f3eb; --sand-200:#f0e9db; --sand-300:#e8dcc8;
+    --sand-400:#d9c8ab; --sand-500:#c4ae8b;
+
+    --success-50:#eef6f1; --success-500:#3e7a5e; --success-700:#2a5340;
+    --warning-50:#fbf3e4; --warning-500:#b07c2e; --warning-700:#7a5420;
+    --danger-50:#faeeec;  --danger-500:#b0442f;  --danger-700:#7c3022;
+
+    --font-display:'Fraunces', ui-serif, Georgia, serif;
+    --font-sans:'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+    --shadow-card: 0 1px 2px rgb(31 42 68 / .04), 0 4px 16px rgb(31 42 68 / .06);
+    --radius-card: 1rem;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:var(--font-sans);
+    background:var(--sand-50);
+    color:var(--navy-800);
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold-200); color:var(--navy-900);}
+
+  /* ---- top bar ---- */
+  .topbar{
+    background:var(--navy-950);
+    color:var(--sand-100);
+  }
+  .topbar-inner{
+    max-width:960px; margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .mark{
+    width:32px; height:32px; border-radius:8px;
+    background:linear-gradient(135deg, var(--gold-400), var(--gold-600));
+    display:flex; align-items:center; justify-content:center;
+    color:var(--navy-950); font-family:var(--font-display); font-weight:700; font-size:14px;
+    flex-shrink:0;
+  }
+  .wordmark{font-family:var(--font-display); font-weight:600; font-size:17px;}
+  .wordmark .gold{color:var(--gold-500);}
+  .topbar-badge{
+    margin-left:auto;
+    font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--gold-400);
+    border:1px solid rgba(198,167,94,.35);
+    padding:4px 10px; border-radius:999px;
+  }
+
+  /* ---- hero ---- */
+  .wrap{max-width:960px; margin:0 auto; padding:48px 24px 80px;}
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(28px,4vw,38px);
+    color:var(--navy-900);
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    color:var(--navy-500);
+    font-size:15px;
+    max-width:560px;
+    line-height:1.6;
+    margin:0 0 32px;
+  }
+
+  .hairline-gold{
+    height:1px; border:none; margin:40px 0;
+    background:linear-gradient(to right, transparent, var(--gold-400), transparent);
+  }
+
+  /* ---- search card ---- */
+  .search-card{
+    background:#fff;
+    border:1px solid var(--sand-200);
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow-card);
+    padding:20px;
+  }
+  .search-row{display:flex; gap:10px;}
+  input#address{
+    flex:1;
+    height:44px;
+    padding:0 14px;
+    border-radius:10px;
+    border:1px solid var(--sand-300);
+    background:var(--sand-50);
+    font-family:var(--font-sans);
+    font-size:14px;
+    color:var(--navy-800);
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input#address:focus{
+    border-color:var(--gold-500);
+    box-shadow:0 0 0 2px var(--gold-200);
+  }
+  button{font-family:var(--font-sans);}
+  .btn-gold{
+    height:44px;
+    padding:0 22px;
+    border-radius:10px;
+    border:none;
+    background:var(--gold-500);
+    color:var(--navy-950);
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:background .15s;
+    white-space:nowrap;
+  }
+  .btn-gold:hover{background:var(--gold-400);}
+  .btn-gold:disabled{opacity:.5; cursor:not-allowed;}
+  .btn-gold:focus-visible{outline:2px solid var(--gold-500); outline-offset:2px;}
+
+  .examples{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .example-chip{
+    font-size:12.5px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--sand-300);
+    background:var(--sand-100);
+    color:var(--navy-700);
+    cursor:pointer;
+    transition:background .15s, border-color .15s;
+  }
+  .example-chip:hover{background:var(--sand-200); border-color:var(--sand-400);}
+
+  /* ---- results ---- */
+  #results{margin-top:32px;}
+  .card{
+    background:#fff;
+    border:1px solid var(--sand-200);
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow-card);
+    padding:20px;
+    margin-bottom:20px;
+  }
+  .card h2{
+    font-family:var(--font-display);
+    font-size:15px; font-weight:600;
+    color:var(--navy-900);
+    margin:0 0 4px;
+  }
+  .card .card-sub{font-size:13px; color:var(--navy-500); margin:0 0 16px;}
+
+  .address-line{font-size:14px; color:var(--navy-800); line-height:1.6;}
+  .address-line .display-name{color:var(--navy-500);}
+  .coords{font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--navy-400); margin-top:4px;}
+
+  .building-row{
+    margin-top:12px; padding-top:12px; border-top:1px dashed var(--sand-300);
+    font-size:13.5px; color:var(--navy-700);
+  }
+
+  .amenity-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
+    gap:14px;
+  }
+  .amenity{
+    border:1px solid var(--sand-200);
+    border-radius:12px;
+    padding:14px;
+    background:var(--sand-50);
+  }
+  .amenity-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .amenity-label{font-size:13px; font-weight:600; color:var(--navy-800); display:flex; align-items:center; gap:6px;}
+  .dot{width:7px; height:7px; border-radius:999px; flex-shrink:0;}
+  .badge-count{
+    font-size:11.5px; font-weight:700;
+    background:var(--navy-800); color:var(--sand-50);
+    padding:2px 8px; border-radius:999px;
+    font-variant-numeric:tabular-nums;
+  }
+  .badge-count.zero{background:var(--sand-300); color:var(--navy-600);}
+  .nearest-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px;}
+  .nearest-list li{
+    font-size:12.5px; color:var(--navy-600);
+    display:flex; justify-content:space-between; gap:8px;
+  }
+  .nearest-list .dist{font-variant-numeric:tabular-nums; color:var(--navy-400); flex-shrink:0;}
+  .nearest-empty{font-size:12.5px; color:var(--navy-400); font-style:italic;}
+
+  .insights-summary{font-size:14.5px; line-height:1.65; color:var(--navy-800); margin:0 0 18px;}
+  .insights-block h3{
+    font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--gold-600); margin:0 0 10px;
+  }
+  .insights-block{margin-bottom:18px;}
+  .insights-block:last-child{margin-bottom:0;}
+  ul.bullets{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  ul.bullets li{
+    font-size:13.5px; line-height:1.55; color:var(--navy-700);
+    padding-left:16px; position:relative;
+  }
+  ul.bullets li::before{
+    content:""; position:absolute; left:0; top:7px;
+    width:6px; height:6px; border-radius:999px; background:var(--gold-500);
+  }
+  ul.caveats li::before{background:var(--sand-400);}
+  ul.caveats li{color:var(--navy-500);}
+
+  /* ---- states ---- */
+  .hint{font-size:12.5px; color:var(--navy-400); margin-top:10px;}
+  .error-card{
+    background:var(--danger-50); border:1px solid rgba(176,68,47,.25);
+    border-radius:var(--radius-card); padding:16px 18px;
+    color:var(--danger-700); font-size:13.5px;
+  }
+
+  .skeleton{
+    border-radius:var(--radius-card);
+    background:linear-gradient(90deg, var(--sand-200) 25%, var(--sand-100) 37%, var(--sand-200) 63%);
+    background-size:400% 100%;
+    animation:shimmer 1.8s linear infinite;
+  }
+  @keyframes shimmer{
+    0%{background-position:100% 50%;}
+    100%{background-position:0 50%;}
+  }
+  .skeleton-card{height:88px; margin-bottom:20px;}
+  .skeleton-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:14px;}
+  .skeleton-tile{height:110px;}
+
+  footer.note{
+    text-align:center; font-size:12px; color:var(--navy-400); margin-top:48px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="mark">IA</span>
+    <span class="wordmark">Immobil&rsquo;<span class="gold">IA</span></span>
+    <span class="topbar-badge">Démo interne</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1>Agent Maison &amp; Quartier</h1>
+  <p class="subtitle">
+    Donne une adresse : l&rsquo;agent géocode le bien, interroge OpenStreetMap
+    (bâtiment + commodités à proximité) puis demande à Mistral d&rsquo;en tirer
+    une synthèse pour l&rsquo;acheteur — sans jamais inventer de donnée.
+  </p>
+
+  <div class="search-card">
+    <div class="search-row">
+      <input id="address" type="text" placeholder="ex. 12 Rue de la République, Lyon" autocomplete="off" />
+      <button class="btn-gold" id="submitBtn">Analyser</button>
+    </div>
+    <div class="examples">
+      <button class="example-chip" data-address="20 Avenue des Champs-Élysées, Paris">Champs-Élysées, Paris</button>
+      <button class="example-chip" data-address="Place Bellecour, Lyon">Place Bellecour, Lyon</button>
+      <button class="example-chip" data-address="Place de la Comédie, Montpellier">Place de la Comédie, Montpellier</button>
+    </div>
+    <p class="hint">Appels réseau réels (Nominatim + Overpass + Mistral) — compte quelques secondes.</p>
+  </div>
+
+  <div id="results"></div>
+
+  <footer class="note">Immobil&rsquo;IA — donn&eacute;es OpenStreetMap &amp; synth&egrave;se Mistral. Usage d&eacute;mo uniquement.</footer>
+</div>
+
+<script>
+const CATEGORY_META = {
+  schools:      { label: "Écoles",         color: "#4c628b" },
+  health:       { label: "Santé",          color: "#b0442f" },
+  shops:        { label: "Commerces",      color: "#c6a75e" },
+  transit:      { label: "Transports",     color: "#3e7a5e" },
+  green_spaces: { label: "Espaces verts",  color: "#326349" },
+};
+
+const addressInput = document.getElementById("address");
+const submitBtn = document.getElementById("submitBtn");
+const results = document.getElementById("results");
+
+document.querySelectorAll(".example-chip").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    addressInput.value = chip.dataset.address;
+    run();
+  });
+});
+
+submitBtn.addEventListener("click", run);
+addressInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") run();
+});
+
+function renderSkeleton() {
+  results.innerHTML = `
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton-grid" style="margin-bottom:20px;">
+      ${Array(5).fill('<div class="skeleton skeleton-tile"></div>').join("")}
+    </div>
+    <div class="skeleton skeleton-card" style="height:160px;"></div>
+  `;
+}
+
+function renderError(message) {
+  results.innerHTML = `<div class="error-card"><strong>Échec de l'agent.</strong> ${escapeHtml(message)}</div>`;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function renderResult(data) {
+  const raw = data.raw;
+  const insights = data.insights;
+
+  const buildingHtml = raw.building
+    ? `<div class="building-row">
+        Bâtiment le plus proche (${raw.building.distance_m} m)
+        ${raw.building.building_type ? ` — type <strong>${escapeHtml(raw.building.building_type)}</strong>` : ""}
+        ${raw.building.levels ? `, ${raw.building.levels} niveau(x)` : ""}
+        ${raw.building.flats ? `, ${raw.building.flats} lot(s)` : ""}
+      </div>`
+    : `<div class="building-row">Aucun bâtiment identifié dans OSM à proximité immédiate.</div>`;
+
+  const amenitiesHtml = raw.amenities.map((cat) => {
+    const meta = CATEGORY_META[cat.category] || { label: cat.category, color: "#93a6c5" };
+    const nearestHtml = cat.nearest.length
+      ? `<ul class="nearest-list">${cat.nearest.map((n) =>
+          `<li><span>${escapeHtml(n.name || "Sans nom")}</span><span class="dist">${n.distance_m} m</span></li>`
+        ).join("")}</ul>`
+      : `<p class="nearest-empty">Aucun résultat</p>`;
+    return `
+      <div class="amenity">
+        <div class="amenity-head">
+          <span class="amenity-label"><span class="dot" style="background:${meta.color}"></span>${meta.label}</span>
+          <span class="badge-count ${cat.count === 0 ? "zero" : ""}">${cat.count}</span>
+        </div>
+        ${nearestHtml}
+      </div>`;
+  }).join("");
+
+  const highlightsHtml = insights.highlights.length
+    ? `<div class="insights-block"><h3>Points forts</h3><ul class="bullets">${
+        insights.highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join("")
+      }</ul></div>`
+    : "";
+
+  const caveatsHtml = insights.caveats.length
+    ? `<div class="insights-block"><h3>À vérifier</h3><ul class="bullets caveats">${
+        insights.caveats.map((c) => `<li>${escapeHtml(c)}</li>`).join("")
+      }</ul></div>`
+    : "";
+
+  results.innerHTML = `
+    <div class="card">
+      <h2>Adresse géocodée</h2>
+      <p class="card-sub">Source : OpenStreetMap / Nominatim</p>
+      <div class="address-line">
+        <div class="display-name">${escapeHtml(raw.address.display_name)}</div>
+        <div class="coords">${raw.address.coordinates.latitude.toFixed(5)}, ${raw.address.coordinates.longitude.toFixed(5)}</div>
+      </div>
+      ${buildingHtml}
+    </div>
+
+    <div class="card">
+      <h2>Commodités à proximité</h2>
+      <p class="card-sub">Rayon de recherche : ${raw.search_radius_m} m</p>
+      <div class="amenity-grid">${amenitiesHtml}</div>
+    </div>
+
+    <hr class="hairline-gold" />
+
+    <div class="card">
+      <h2>Synthèse — rédigée par Mistral</h2>
+      <p class="card-sub">Basée uniquement sur les données ci-dessus</p>
+      <p class="insights-summary">${escapeHtml(insights.summary)}</p>
+      ${highlightsHtml}
+      ${caveatsHtml}
+    </div>
+  `;
+}
+
+async function run() {
+  const address = addressInput.value.trim();
+  if (!address) {
+    addressInput.focus();
+    return;
+  }
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Analyse…";
+  renderSkeleton();
+
+  try {
+    const resp = await fetch("/api/neighborhood", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) {
+      throw new Error(data.detail || "Erreur inconnue");
+    }
+    renderResult(data);
+  } catch (err) {
+    renderError(err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Analyser";
+  }
+}
+</script>
+
+</body>
+</html>
