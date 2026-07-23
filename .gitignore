@@ -1,0 +1,53 @@
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/
+*.pem
+
+# --- env files ---
+.env
+.env.*
+!.env.example
+
+# --- Python (backend) ---
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Node / Next.js (frontend) ---
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+.vercel
+
+# --- logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- data / uploads ---
+backend/data/legal_uploads/
+backend/data/legal_rag/processed/extracted_text/*
+backend/data/legal_rag/processed/chunks/*
+backend/data/legal_rag/processed/metadata/*
+backend/data/legal_rag/processed/embeddings/*
+!backend/data/legal_rag/processed/extracted_text/.gitkeep
+!backend/data/legal_rag/processed/chunks/.gitkeep
+!backend/data/legal_rag/processed/metadata/.gitkeep
+!backend/data/legal_rag/processed/embeddings/.gitkeep
