@@ -1,0 +1,507 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------------------------------------------------------------------
+%  Police et langue (compilation avec XeLaTeX)
+% ------------------------------------------------------------------
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{french}
+\usepackage{eurosym}
+
+% ------------------------------------------------------------------
+%  Mise en page
+% ------------------------------------------------------------------
+\usepackage[a4paper,margin=2.4cm,headheight=15pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+
+% ------------------------------------------------------------------
+%  Couleurs de la charte
+% ------------------------------------------------------------------
+\definecolor{primary}{HTML}{1F4E79}
+\definecolor{secondary}{HTML}{2E86AB}
+\definecolor{light}{HTML}{EAF1F7}
+\definecolor{greytext}{HTML}{555555}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  urlcolor=secondary,
+  pdftitle={Cahier des charges - Immobil'IA},
+  pdfauthor={Equipe Immobil'IA}
+}
+
+% ------------------------------------------------------------------
+%  Titres
+% ------------------------------------------------------------------
+\titleformat{\section}
+  {\color{primary}\Large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}
+  {\color{secondary}\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\color{primary}\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+
+% ------------------------------------------------------------------
+%  En-têtes / pieds de page
+% ------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{greytext}Immobil'IA}
+\fancyhead[R]{\small\color{greytext}Cahier des charges}
+\fancyfoot[L]{\small\color{greytext}Document confidentiel}
+\fancyfoot[R]{\small\color{greytext}Page \thepage\ / \pageref{LastPage}}
+
+% ------------------------------------------------------------------
+%  Environnement d'exigence
+%  #1 = identifiant, #2 = intitulé
+% ------------------------------------------------------------------
+\newcommand{\exigence}[2]{%
+  \par\vspace{6pt}%
+  \noindent\colorbox{light}{%
+    \parbox{\dimexpr\textwidth-2\fboxsep}{%
+      \textbf{\color{primary}#1} \textemdash\ \textbf{#2}%
+    }%
+  }\par\vspace{2pt}%
+}
+
+\newenvironment{acceptation}
+  {\vspace{2pt}\noindent\textit{Règles d'acceptation :}
+   \begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]}
+  {\end{itemize}\vspace{4pt}}
+
+\setlist[itemize]{label=\textcolor{secondary}{\textbullet}}
+
+% ==================================================================
+\begin{document}
+
+% ================= PAGE DE GARDE =================
+\begin{titlepage}
+\centering
+\vspace*{2.2cm}
+
+{\color{primary}\rule{\textwidth}{2pt}}\\[0.5cm]
+{\Huge\bfseries\color{primary} Cahier des charges}\\[0.35cm]
+{\LARGE\color{secondary} Immobil'IA}\\[0.35cm]
+{\large\color{greytext} Plateforme immobilière augmentée par l'intelligence artificielle}\\[0.3cm]
+{\color{primary}\rule{\textwidth}{2pt}}\\[2cm]
+
+\begin{tabular}{rl}
+\textbf{Projet}  & : Immobil'IA \\[4pt]
+\textbf{Type}    & : Cahier des charges fonctionnel \\[4pt]
+\textbf{Version} & : 1.0 \\[4pt]
+\textbf{Date}    & : \today \\[4pt]
+\textbf{Statut}  & : À valider \\
+\end{tabular}
+
+\vfill
+{\small\color{greytext} Document décrivant l'ensemble des fonctionnalités,
+des critères et des règles d'acceptation attendus de la solution.}
+\end{titlepage}
+
+% ================= TABLE DES MATIÈRES =================
+\tableofcontents
+\thispagestyle{fancy}
+\clearpage
+
+% ==================================================================
+\section{Présentation du projet}
+
+\subsection{Contexte}
+Immobil'IA est une plateforme immobilière qui met en relation les personnes
+qui proposent un bien (vente ou location), celles qui recherchent un bien et
+celles qui souhaitent investir. La plateforme s'appuie sur l'intelligence
+artificielle pour assister chaque profil d'utilisateur dans ses tâches :
+dépôt et optimisation d'annonces, recherche et comparaison de biens, analyse
+d'investissement, ainsi que des services transverses d'aide à la décoration
+et à l'estimation de travaux.
+
+\subsection{Objectif du document}
+Ce cahier des charges recense l'ensemble des fonctionnalités attendues de la
+solution, regroupées par acteur, ainsi que les critères et les règles
+d'acceptation associés à chacune d'elles. Il constitue le référentiel
+fonctionnel partagé entre les parties prenantes du projet. Il ne préjuge
+d'aucun choix technique, d'aucune architecture ni d'aucune technologie de
+mise en œuvre.
+
+\subsection{Périmètre}
+Le périmètre couvre les fonctionnalités décrites pour les acteurs suivants :
+le Vendeur / Bailleur, le Locataire / Acheteur, l'Investisseur, ainsi que les
+fonctionnalités communes à tous les acteurs. Toute fonctionnalité non
+mentionnée dans le présent document est considérée comme hors périmètre.
+
+\subsection{Acteurs}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Le Vendeur / Bailleur} : utilisateur qui dépose une offre de vente ou de location.
+  \item \textbf{Le Locataire / Acheteur} : utilisateur qui recherche un bien à louer ou à acheter.
+  \item \textbf{L'Investisseur} : utilisateur qui analyse des biens dans une optique de rentabilité et de placement.
+  \item \textbf{Tous les acteurs} : fonctionnalités communes accessibles à l'ensemble des profils.
+\end{itemize}
+
+\subsection{Convention de lecture des exigences}
+Chaque exigence fonctionnelle est identifiée par un code unique de la forme
+\texttt{EF-X-NN}, où \texttt{X} désigne l'acteur concerné
+(\texttt{V} : Vendeur / Bailleur, \texttt{L} : Locataire / Acheteur,
+\texttt{I} : Investisseur, \texttt{T} : transverse / tous les acteurs) et
+\texttt{NN} le numéro d'ordre. Chaque exigence est accompagnée d'une
+description et d'une liste de règles d'acceptation. Une exigence n'est
+considérée comme livrée que si l'ensemble de ses règles d'acceptation est
+satisfait.
+
+\clearpage
+
+% ==================================================================
+\section{Exigences fonctionnelles — Vendeur / Bailleur}
+
+\exigence{EF-V-01}{Dépôt de l'offre}
+Le vendeur / bailleur peut déposer une offre comprenant des photos, des
+vidéos et une description complète du bien.
+\begin{acceptation}
+  \item L'utilisateur peut créer une nouvelle offre et y ajouter une ou plusieurs photos.
+  \item L'utilisateur peut ajouter une ou plusieurs vidéos à l'offre.
+  \item L'utilisateur peut saisir une description complète du bien.
+  \item L'offre ne peut être publiée que si les éléments requis (photos, vidéos, description) sont fournis.
+\end{acceptation}
+
+\exigence{EF-V-02}{Recommandation de prix intelligente}
+L'IA analyse l'offre et recommande un prix, en signalant tout écart par
+rapport au marché.
+\begin{acceptation}
+  \item Le système propose un prix recommandé après analyse de l'offre déposée.
+  \item Le système signale lorsque le prix saisi est trop élevé par rapport au marché.
+  \item Le système signale lorsque le prix saisi est trop faible par rapport au marché.
+  \item Le vendeur reste libre d'accepter ou d'ignorer la recommandation.
+\end{acceptation}
+
+\exigence{EF-V-03}{Recommandation des charges de location}
+Le système recommande les charges de location à intégrer dans la description.
+\begin{acceptation}
+  \item Le système propose une recommandation de charges de location pour l'offre.
+  \item La recommandation peut être intégrée à la description de l'annonce.
+\end{acceptation}
+
+\exigence{EF-V-04}{Analyse concurrentielle automatique}
+Le système génère automatiquement une liste d'offres similaires afin de se
+positionner face à la concurrence.
+\begin{acceptation}
+  \item Le système génère une liste d'offres similaires au bien déposé.
+  \item Les offres similaires correspondent au même quartier et au même type de bien.
+  \item La liste permet au vendeur de comparer son offre à la concurrence.
+\end{acceptation}
+
+\exigence{EF-V-05}{Vérification de la description}
+Le système détecte les incohérences et les informations invalides ou
+manquantes dans l'annonce.
+\begin{acceptation}
+  \item Le système détecte les incohérences entre la description et les photos (ex. surface, nombre de pièces).
+  \item Le système signale les informations invalides.
+  \item Le système signale les informations manquantes.
+\end{acceptation}
+
+\exigence{EF-V-06}{Génération de vidéo de visite virtuelle}
+Le système génère une vidéo de visite virtuelle réaliste à partir des photos
+et vidéos brutes fournies.
+\begin{acceptation}
+  \item Le système génère une vidéo de visite virtuelle à partir des photos et vidéos fournies par le vendeur.
+  \item La vidéo générée est associée à l'offre.
+\end{acceptation}
+
+\exigence{EF-V-07}{Score de qualité de l'annonce}
+Le système attribue un score de qualité à l'annonce, accompagné de
+suggestions concrètes d'amélioration.
+\begin{acceptation}
+  \item Le système calcule et affiche un score de qualité de l'annonce.
+  \item Le système fournit des suggestions concrètes d'amélioration (ex. angle de photo manquant, luminosité à corriger, description trop courte).
+  \item Le score reflète la prise en compte des améliorations apportées.
+\end{acceptation}
+
+\exigence{EF-V-08}{Génération des réglementations et d'un contrat conforme}
+Le système génère les réglementations applicables et un exemple de contrat
+conforme à la loi française.
+\begin{acceptation}
+  \item Le système génère les réglementations applicables à l'offre.
+  \item Le système génère un exemple de contrat conforme à la loi française.
+\end{acceptation}
+
+\exigence{EF-V-09}{Alerte anti-fraude / anti-discrimination}
+Le système détecte les formulations discriminatoires ou illégales présentes
+dans l'annonce.
+\begin{acceptation}
+  \item Le système détecte les formulations discriminatoires dans l'annonce.
+  \item Le système détecte les formulations illégales dans l'annonce.
+  \item Le système alerte le vendeur lorsqu'une telle formulation est détectée.
+\end{acceptation}
+
+\clearpage
+
+% ==================================================================
+\section{Exigences fonctionnelles — Locataire / Acheteur}
+
+\exigence{EF-L-01}{Saisie du besoin en langage naturel}
+Le locataire / acheteur exprime son besoin en langage naturel (budget,
+critères, mode de vie), exploité via une recherche hybride.
+\begin{acceptation}
+  \item L'utilisateur peut saisir son besoin en langage naturel.
+  \item La saisie prend en compte le budget, les critères et le mode de vie.
+  \item La recherche s'appuie sur une approche de recherche hybride.
+\end{acceptation}
+
+\exigence{EF-L-02}{Agrégation d'offres}
+Le système agrège les offres provenant de la base de la plateforme et du web.
+\begin{acceptation}
+  \item Le système présente les offres issues de la base de la plateforme.
+  \item Le système présente les offres issues du web.
+  \item Les offres des deux sources sont agrégées dans un même ensemble de résultats.
+\end{acceptation}
+
+\exigence{EF-L-03}{Cartographie comparative des offres}
+Le système propose une visualisation géographique comparative des offres.
+\begin{acceptation}
+  \item Les offres sont affichées sur une représentation géographique.
+  \item La visualisation présente le prix des offres.
+  \item La visualisation présente les distances et les points d'intérêt (ex. bruit, pollution, embouteillage, école, université).
+\end{acceptation}
+
+\exigence{EF-L-04}{Recommandation des meilleures offres}
+Le système recommande les meilleures offres selon le rapport qualité / prix
+et une analyse concurrentielle par score.
+\begin{acceptation}
+  \item Le système recommande les offres selon le rapport qualité / prix.
+  \item Les offres sont classées selon un score d'analyse concurrentielle (score d'honnêteté, par ordre croissant).
+\end{acceptation}
+
+\exigence{EF-L-05}{Alerte qualité de quartier}
+Le système signale les quartiers mal notés.
+\begin{acceptation}
+  \item Le système signale lorsqu'un quartier est mal noté.
+  \item Le signalement prend en compte des critères tels que la sécurité, le transport et le bruit.
+\end{acceptation}
+
+\exigence{EF-L-06}{Réglementations, contrat et vérification de contrat}
+Le système génère les réglementations et un exemple de contrat conforme, et
+vérifie le contrat généré par le vendeur / bailleur.
+\begin{acceptation}
+  \item Le système génère les réglementations applicables.
+  \item Le système génère un exemple de contrat conforme à la loi française.
+  \item Le système vérifie le contrat généré par le vendeur / bailleur.
+\end{acceptation}
+
+\exigence{EF-L-07}{Assistant de visite avec questions suggérées}
+Le système prépare une liste de questions pertinentes à poser au propriétaire
+selon le type de bien.
+\begin{acceptation}
+  \item Le système propose une liste de questions à poser au propriétaire.
+  \item Les questions proposées sont adaptées au type de bien.
+\end{acceptation}
+
+\exigence{EF-L-08}{Chat comparatif multi-biens}
+Le système compare plusieurs biens à la demande et génère un tableau de
+synthèse.
+\begin{acceptation}
+  \item L'utilisateur peut demander la comparaison de plusieurs biens (ex. trois appartements).
+  \item Le système génère un tableau de synthèse présentant les avantages et les inconvénients de chaque bien.
+\end{acceptation}
+
+\exigence{EF-L-09}{Matching de profils pour colocation}
+Le système propose un appariement de profils pour la colocation lorsque
+l'utilisateur en recherche.
+\begin{acceptation}
+  \item L'utilisateur peut indiquer qu'il recherche une colocation.
+  \item Le système propose un appariement de profils correspondant à la recherche.
+\end{acceptation}
+
+\exigence{EF-L-10}{Vérification de disponibilité du bien}
+Le système vérifie si le bien est déjà loué afin d'éviter les arnaques, via
+une recherche par image.
+\begin{acceptation}
+  \item Le système permet de vérifier si un bien est déjà loué.
+  \item La vérification peut s'appuyer sur une recherche par image.
+\end{acceptation}
+
+\exigence{EF-L-11}{Notation et commentaire}
+L'utilisateur peut noter et commenter, ces éléments alimentant le score.
+\begin{acceptation}
+  \item L'utilisateur peut attribuer une note.
+  \item L'utilisateur peut laisser un commentaire.
+  \item La note contribue au calcul du score.
+\end{acceptation}
+
+\exigence{EF-L-12}{Signalement de scam / comportement inadéquat}
+L'utilisateur peut signaler une arnaque ou un comportement inadéquat du
+propriétaire.
+\begin{acceptation}
+  \item L'utilisateur peut signaler une arnaque (scam).
+  \item L'utilisateur peut signaler un comportement inadéquat du propriétaire.
+\end{acceptation}
+
+\exigence{EF-L-13}{Sortie sous forme d'image du plan}
+Le système peut produire une sortie sous forme d'image du plan.
+\begin{acceptation}
+  \item Le système peut générer une image représentant le plan du bien.
+\end{acceptation}
+
+\exigence{EF-L-14}{Notification d'offre similaire}
+Si l'utilisateur n'a pas trouvé l'offre recherchée, il peut être notifié
+lorsqu'une offre similaire est publiée.
+\begin{acceptation}
+  \item L'utilisateur peut demander à être notifié lorsqu'une offre similaire à sa recherche est publiée.
+  \item Le système envoie une notification lors de la publication d'une offre similaire.
+\end{acceptation}
+
+\clearpage
+
+% ==================================================================
+\section{Exigences fonctionnelles — Investisseur}
+
+\exigence{EF-I-01}{Rapport d'investissement personnalisé}
+Le système génère un rapport d'investissement personnalisé avec simulation de
+rentabilité locative.
+\begin{acceptation}
+  \item Le système génère un rapport d'investissement personnalisé.
+  \item Le rapport inclut une simulation de rentabilité locative.
+\end{acceptation}
+
+\exigence{EF-I-02}{Scénarios « et si »}
+Le système permet de simuler des scénarios « et si ».
+\begin{acceptation}
+  \item Le système permet de simuler l'impact de travaux.
+  \item Le système permet de simuler l'évolution du quartier.
+  \item Le système permet de simuler la variation des taux d'intérêt.
+\end{acceptation}
+
+\exigence{EF-I-03}{Score de risque locatif}
+Le système calcule un score de risque locatif.
+\begin{acceptation}
+  \item Le système calcule et affiche un score de risque locatif.
+  \item Le score prend en compte des facteurs tels que la zone tendue, la vacance locative moyenne et le profil des locataires types.
+\end{acceptation}
+
+\exigence{EF-I-04}{Comparateur multi-biens pour portefeuille}
+Le système compare plusieurs biens pour orienter l'allocation d'un
+portefeuille.
+\begin{acceptation}
+  \item L'utilisateur peut comparer plusieurs biens en vue d'un investissement.
+  \item Le système aide à identifier le meilleur rendement pour un budget donné (ex. où investir 200\,k\euro{}).
+\end{acceptation}
+
+\exigence{EF-I-05}{Prévision de plus-value}
+Le système fournit une prévision de plus-value à 5 et 10 ans basée sur les
+tendances du quartier.
+\begin{acceptation}
+  \item Le système fournit une prévision de plus-value à 5 ans.
+  \item Le système fournit une prévision de plus-value à 10 ans.
+  \item La prévision se base sur les tendances du quartier.
+\end{acceptation}
+
+\exigence{EF-I-06}{Dashboard de l'investisseur}
+Le système met à disposition un tableau de bord permettant à l'investisseur
+de mieux comprendre ses intérêts.
+\begin{acceptation}
+  \item Le système affiche un tableau de bord dédié à l'investisseur.
+  \item Le tableau de bord aide l'investisseur à comprendre ses intérêts.
+\end{acceptation}
+
+\clearpage
+
+% ==================================================================
+\section{Exigences fonctionnelles — Tous les acteurs}
+
+\exigence{EF-T-01}{Génération d'idées de décoration}
+À partir d'une photo ou d'une vidéo, le système génère des idées de
+décoration selon l'activité et les préférences.
+\begin{acceptation}
+  \item L'utilisateur peut téléverser une photo ou une vidéo.
+  \item Le système génère des idées de décoration à partir du média fourni.
+  \item Les idées tiennent compte de l'activité et des préférences de l'utilisateur.
+\end{acceptation}
+
+\exigence{EF-T-02}{Décoration selon le budget et les préférences}
+Le système propose une décoration selon le budget et les préférences, dans le
+respect des réglementations.
+\begin{acceptation}
+  \item Les propositions de décoration respectent le budget indiqué.
+  \item Les propositions de décoration respectent les préférences de l'utilisateur.
+  \item Les propositions respectent les réglementations applicables.
+\end{acceptation}
+
+\exigence{EF-T-03}{Mode avant / après (home staging)}
+Le système propose un mode comparatif « avant / après » pour convaincre un
+vendeur de réaliser du home staging.
+\begin{acceptation}
+  \item Le système présente une comparaison « avant / après ».
+  \item La comparaison illustre l'intérêt du home staging.
+\end{acceptation}
+
+\exigence{EF-T-04}{Estimation de réparation à partir des photos}
+Le système estime les réparations à partir des photos et répercute cette
+estimation sur le score et le prix.
+\begin{acceptation}
+  \item Le système détecte des besoins de réparation à partir des photos (ex. humidité, réparations dans les murs).
+  \item L'estimation entraîne une diminution du score ou un ajustement de l'estimation de prix.
+\end{acceptation}
+
+\clearpage
+
+% ==================================================================
+\section{Récapitulatif des exigences}
+
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{>{\bfseries}p{2.2cm} p{\dimexpr\textwidth-3cm}}
+\toprule
+\rowcolor{light}\textbf{Identifiant} & \textbf{Intitulé de l'exigence} \\
+\midrule
+\endfirsthead
+\rowcolor{light}\textbf{Identifiant} & \textbf{Intitulé de l'exigence} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+EF-V-01 & Dépôt de l'offre \\
+EF-V-02 & Recommandation de prix intelligente \\
+EF-V-03 & Recommandation des charges de location \\
+EF-V-04 & Analyse concurrentielle automatique \\
+EF-V-05 & Vérification de la description \\
+EF-V-06 & Génération de vidéo de visite virtuelle \\
+EF-V-07 & Score de qualité de l'annonce \\
+EF-V-08 & Génération des réglementations et d'un contrat conforme \\
+EF-V-09 & Alerte anti-fraude / anti-discrimination \\
+EF-L-01 & Saisie du besoin en langage naturel \\
+EF-L-02 & Agrégation d'offres \\
+EF-L-03 & Cartographie comparative des offres \\
+EF-L-04 & Recommandation des meilleures offres \\
+EF-L-05 & Alerte qualité de quartier \\
+EF-L-06 & Réglementations, contrat et vérification de contrat \\
+EF-L-07 & Assistant de visite avec questions suggérées \\
+EF-L-08 & Chat comparatif multi-biens \\
+EF-L-09 & Matching de profils pour colocation \\
+EF-L-10 & Vérification de disponibilité du bien \\
+EF-L-11 & Notation et commentaire \\
+EF-L-12 & Signalement de scam / comportement inadéquat \\
+EF-L-13 & Sortie sous forme d'image du plan \\
+EF-L-14 & Notification d'offre similaire \\
+EF-I-01 & Rapport d'investissement personnalisé \\
+EF-I-02 & Scénarios « et si » \\
+EF-I-03 & Score de risque locatif \\
+EF-I-04 & Comparateur multi-biens pour portefeuille \\
+EF-I-05 & Prévision de plus-value \\
+EF-I-06 & Dashboard de l'investisseur \\
+EF-T-01 & Génération d'idées de décoration \\
+EF-T-02 & Décoration selon le budget et les préférences \\
+EF-T-03 & Mode avant / après (home staging) \\
+EF-T-04 & Estimation de réparation à partir des photos \\
+\end{longtable}
+
+\end{document}

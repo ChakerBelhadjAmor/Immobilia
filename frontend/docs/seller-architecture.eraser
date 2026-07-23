@@ -1,0 +1,71 @@
+title Immobil'IA — Parcours & Architecture Vendeur / Bailleur
+
+Vendeur [icon: mdi:account, color: blue]
+
+Presentation [label: "Présentation — Next.js 16 App Router (React 19 + TypeScript)", color: blue] {
+  Auth [icon: mdi:login-variant, label: "Connexion / Inscription"]
+  Dashboard [icon: mdi:view-dashboard, label: "Espace vendeur (/espace/vendeur)"]
+  Wizard [icon: mdi:file-document-edit, label: "Wizard annonce - 7 étapes (/annonces/nouvelle)"]
+  Messages [icon: mdi:message-text, label: "Messagerie (/messages)"]
+  Notifs [icon: mdi:bell, label: "Notifications (/notifications)"]
+  Profile [icon: mdi:account-cog, label: "Profil (/profil)"]
+}
+
+DesignSystem [label: "UI / Design System", color: purple] {
+  Tailwind [icon: mdi:palette, label: "Tailwind CSS v4"]
+  UIKit [icon: mdi:view-grid, label: "Kit UI: Button, Table, Badge, Card, Tabs, StatusChip"]
+  Motion [icon: mdi:motion, label: "Framer Motion (transitions d'étapes)"]
+  Icons [icon: mdi:vector-square, label: "Lucide Icons"]
+  Forms [icon: mdi:form-textbox, label: "React Hook Form + Zod"]
+}
+
+Services [label: "Mock Service Layer (src/services) - miroir de la future API", color: orange] {
+  AIService [icon: mdi:robot, label: "ai-service.ts"]
+  PropertyService [icon: mdi:home-city, label: "property-service.ts"]
+}
+
+Data [label: "Mock Data Layer (src/data - objets TS en mémoire)", color: green] {
+  PropertiesData [icon: mdi:database, label: "properties.ts"]
+  UsersData [icon: mdi:database, label: "users.ts"]
+  CommunityData [icon: mdi:database, label: "community.ts (offres, messages, notifications)"]
+}
+
+FutureBackend [label: "Backend futur - non implémenté aujourd'hui (hors périmètre actuel)", color: grey] {
+  API [icon: mdi:api, label: "/api/ai/*, /api/properties (prévu)"]
+  DB [icon: mdi:database-cog, label: "Base de données réelle (prévue)"]
+}
+
+// Parcours vendeur
+
+Vendeur > Auth: "S'inscrire / se connecter"
+Auth > Dashboard: "Accède à l'espace vendeur"
+Vendeur > Dashboard: "Suit vues, favoris, score qualité moyen, offres en attente"
+
+Dashboard > Wizard: "Dépose une annonce - photos, vidéos, description (EF-V-01)"
+
+Wizard > AIService: "Vérifie description/photos - incohérences, infos manquantes (EF-V-05)"
+Wizard > AIService: "Détecte formulations discriminatoires/illégales (EF-V-09)"
+Wizard > AIService: "Demande prix recommandé vs marché (EF-V-02)"
+Wizard > AIService: "Demande charges de location recommandées (EF-V-03)"
+Wizard > AIService: "Lance analyse concurrentielle - biens comparables du quartier (EF-V-04)"
+Wizard > AIService: "Calcule score qualité annonce + suggestions (EF-V-07)"
+Wizard > AIService: "Génère réglementations + contrat conforme loi française (EF-V-08)"
+Wizard > Wizard: "Génère visite virtuelle IA depuis photos/vidéos brutes (EF-V-06)"
+Wizard > PropertyService: "Publie l'annonce (brouillon -> publié)"
+
+AIService > PropertiesData: "Lit biens comparables / estimation IA"
+PropertyService > PropertiesData: "CRUD annonce du vendeur"
+Dashboard > PropertiesData: "Lit mes annonces"
+Dashboard > CommunityData: "Lit offres reçues (en attente / acceptée / refusée / expirée)"
+
+Dashboard > Messages: "Répond aux acquéreurs / locataires intéressés"
+Messages > CommunityData: "Lit/écrit conversations"
+Dashboard > Notifs: "Alerte nouvelle offre / nouveau message"
+Notifs > CommunityData: "Lit notifications"
+Vendeur > Profile: "Gère son profil"
+Profile > UsersData: "Lit/écrit profil utilisateur"
+
+Presentation > DesignSystem: "Construit avec"
+Forms > Wizard: "Valide chaque étape du formulaire (schémas Zod)"
+
+Services > FutureBackend: "Remplacement futur prévu - même contrat d'interface (dashed conceptually, no live connection today)"

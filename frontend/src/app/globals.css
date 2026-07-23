@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+@theme {
+  /* ------------------------------------------------------------------
+     Immobil'IA design tokens
+     Brand: Navy #1F2A44 · Warm Beige #E8DCC8 · Soft Gold #C6A75E
+  ------------------------------------------------------------------ */
+
+  --color-navy-50: #f0f3f9;
+  --color-navy-100: #dde4ef;
+  --color-navy-200: #bcc9de;
+  --color-navy-300: #93a6c5;
+  --color-navy-400: #6c82a8;
+  --color-navy-500: #4c628b;
+  --color-navy-600: #38496e;
+  --color-navy-700: #2b3956;
+  --color-navy-800: #1f2a44;
+  --color-navy-900: #16203a;
+  --color-navy-950: #0d1425;
+
+  --color-gold-50: #fbf7ee;
+  --color-gold-100: #f4ebd5;
+  --color-gold-200: #e8d6aa;
+  --color-gold-300: #dcc183;
+  --color-gold-400: #d1b26c;
+  --color-gold-500: #c6a75e;
+  --color-gold-600: #a98b47;
+  --color-gold-700: #876d37;
+  --color-gold-800: #6b5730;
+  --color-gold-900: #574727;
+
+  --color-sand-50: #fbf9f4;
+  --color-sand-100: #f7f3eb;
+  --color-sand-200: #f0e9db;
+  --color-sand-300: #e8dcc8;
+  --color-sand-400: #d9c8ab;
+  --color-sand-500: #c4ae8b;
+  --color-sand-600: #a89066;
+  --color-sand-700: #8a7350;
+  --color-sand-800: #6f5d42;
+  --color-sand-900: #5a4c38;
+
+  --color-success-50: #eef6f1;
+  --color-success-500: #3e7a5e;
+  --color-success-600: #326349;
+  --color-success-700: #2a5340;
+
+  --color-warning-50: #fbf3e4;
+  --color-warning-500: #b07c2e;
+  --color-warning-600: #936625;
+  --color-warning-700: #7a5420;
+
+  --color-danger-50: #faeeec;
+  --color-danger-500: #b0442f;
+  --color-danger-600: #953a28;
+  --color-danger-700: #7c3022;
+
+  --font-display: var(--font-fraunces), "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui,
+    sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(31 42 68 / 0.04), 0 4px 16px rgb(31 42 68 / 0.06);
+  --shadow-card-hover: 0 2px 4px rgb(31 42 68 / 0.06),
+    0 12px 32px rgb(31 42 68 / 0.12);
+  --shadow-modal: 0 8px 24px rgb(13 20 37 / 0.16),
+    0 24px 64px rgb(13 20 37 / 0.24);
+
+  --radius-card: 1rem;
+
+  --animate-shimmer: shimmer 1.8s linear infinite;
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-sand-50);
+  color: var(--color-navy-800);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-gold-200);
+  color: var(--color-navy-900);
+}
+
+/* Visible focus ring, brand-toned */
+:focus-visible {
+  outline: 2px solid var(--color-gold-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Tabular figures for data-heavy UI */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Thin gold hairline used as a section divider signature */
+.hairline-gold {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold-400) 20%,
+    var(--color-gold-400) 80%,
+    transparent
+  );
+  height: 1px;
+}
+
+/* Custom scrollbar, subtle */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sand-400) transparent;
+}

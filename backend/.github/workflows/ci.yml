@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref (e.g. new push to a PR).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Static checks + tests, run against the source in the uv dev env.
+  quality:
+    name: Lint · Types · Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.11"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Mypy (strict)
+        run: uv run mypy app tests
+
+      - name: Pytest
+        run: uv run pytest
+
+  # Builds the deployment artifact and proves it boots.
+  docker:
+    name: Docker build · boot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t immobilia-backend:ci .
+
+      - name: Run container
+        run: docker run -d --name api -p 8000:8000 immobilia-backend:ci
+
+      - name: Wait for /health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:8000/health | grep -q '"status":"ok"'; then
+              echo "container healthy"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::/health never became ready"
+          docker logs api
+          exit 1
+
+      - name: Teardown
+        if: always()
+        run: docker rm -f api
